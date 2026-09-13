@@ -2,10 +2,11 @@
 /* Wallet flow tests: EIP-6963 discovery, picker, friendly errors, and the
    full wallet-signed publish path (mock provider backed by a real ethers key). */
 const fs = require('fs');
+const path = require('path');
 const { JSDOM } = require('jsdom');
 const { ethers } = require('ethers');
 
-const html = fs.readFileSync('/home/user/lidex/index.html', 'utf8');
+const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
 
 function makeMockWallet(name, rdns, behavior) {
   /* behavior: 'ok' | 'reject' | 'pending' */

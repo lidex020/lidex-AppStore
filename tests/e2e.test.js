@@ -2,7 +2,8 @@
 /* E2E: publish a Lidex app event to REAL relays, then boot the real app in
    jsdom with real WebSockets and confirm it discovers + verifies the app. */
 const fs = require('fs');
-const C = require('/home/user/lidex/core.js');
+const path = require('path');
+const C = require(path.join(__dirname, '..', 'core.js'));
 const WS = require('ws');
 const { JSDOM } = require('jsdom');
 
@@ -66,7 +67,7 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   await sleep(6000);
 
   /* ---- 2. boot the real app (simulating the discoverer's Lidex client) ---- */
-  const html = fs.readFileSync('/home/user/lidex/index.html', 'utf8');
+  const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
   const errors = [];
   const dom = new JSDOM(html, {
     url: 'https://lidex.test/discover.html',

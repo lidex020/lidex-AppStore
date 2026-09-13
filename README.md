@@ -25,7 +25,7 @@ The entire product is a single self-contained HTML file: `index.html` (~184 KB, 
 - **As a user:** browse, search, pin apps, read/write reviews and likes.
 - **As a developer:** Connect wallet → sign one free message (creates your publisher key) → fill the publish form → done. Your listing is live on the network instantly.
 
-> In sandboxed embedded previews (no network, no storage) the app degrades gracefully: editorial directory only, ephemeral state. Open it as a normal page for the full experience.
+> In sandboxed embedded previews (no network, no storage) the app shows an empty production store and an ephemeral-state warning. Open it as a normal page for the full experience.
 
 ## How "no backend, no database" is possible
 
@@ -89,7 +89,7 @@ Layout was additionally verified headlessly (desktop 1440px & mobile 390px: no o
 - Permissionless means permissionless: anyone can publish anything; trust comes from signatures (verified badges), reviews, and your own judgment — never from a server.
 - Deletion is best-effort (NIP-09 + replaceable tombstone); archives may retain copies.
 - Reviews/likes are tied to Nostr keys and are public by design (like the rest of Nostr).
-- Ratings for **editorial directory** entries are never fabricated — only real network data is counted.
+- Discover contains only signed listings published to the network. There are no built-in apps, editorial entries, or seeded ratings.
 
 ## Roadmap ideas
 

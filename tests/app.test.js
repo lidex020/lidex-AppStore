@@ -1,9 +1,10 @@
 'use strict';
 /* Headless smoke test of the assembled lidex/index.html via jsdom */
 const fs = require('fs');
+const path = require('path');
 const { JSDOM } = require('jsdom');
 
-const html = fs.readFileSync('/home/user/lidex/index.html', 'utf8');
+const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
 let errors = [];
 
 const dom = new JSDOM(html, {
@@ -34,30 +35,24 @@ function ok(cond, name, extra) {
   /* ---- boot ---- */
   ok(errors.length === 0, 'no runtime errors on boot', errors.slice(0, 3).join(' | '));
   ok(doc.querySelector('.hero h1') && doc.querySelector('.hero h1').textContent.includes('without the gatekeepers'), 'hero renders');
-  ok(doc.querySelectorAll('.appcard').length >= 15, 'directory cards render (' + doc.querySelectorAll('.appcard').length + ')');
+  ok(doc.querySelectorAll('.appcard').length === 0, 'production store starts without seeded apps');
   ok(doc.querySelector('#netpill'), 'net pill renders');
 
   /* ---- discover sections ---- */
   const sections = Array.from(doc.querySelectorAll('.sechead h2')).map(h => h.textContent);
-  ok(sections.includes("Editor's directory"), 'directory section');
-  ok(sections.includes('Trending now'), 'trending section');
+  ok(!sections.includes("Editor's directory"), 'no editorial directory section');
+  ok(!sections.includes('Trending now'), 'empty store hides ranking sections');
 
   /* ---- routing: category ---- */
   evalIn("go('#/category/defi')");
   await sleep(80);
   ok(doc.body.textContent.includes('DeFi'), 'category view renders');
 
-  /* ---- routing: app detail (directory) ---- */
-  evalIn("go('#/app/dir%3Auniswap')");
-  await sleep(80);
-  ok(doc.body.textContent.includes('Uniswap'), 'directory app detail renders');
-  ok(doc.body.textContent.includes('Editorial'), 'directory trust panel present');
-
   /* ---- search ---- */
   evalIn("location.hash = '#/search?q=uniswap'");
   await sleep(120);
   ok(doc.body.textContent.includes('Results for'), 'search view renders');
-  ok(doc.querySelectorAll('.appcard').length >= 1, 'search finds Uniswap');
+  ok(doc.querySelectorAll('.appcard').length === 0, 'search does not return seeded apps');
 
   /* ---- about / settings / my ---- */
   for (const route of ["#/about", "#/settings", "#/my", "#/dev"]) {

@@ -1,6 +1,7 @@
 'use strict';
 const assert = require('assert');
-const C = require('/home/user/lidex/core.js');
+const path = require('path');
+const C = require(path.join(__dirname, '..', 'core.js'));
 const { schnorr } = require('@noble/curves/secp256k1.js');
 
 let pass = 0, fail = 0;
